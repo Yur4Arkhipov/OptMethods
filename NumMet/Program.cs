@@ -332,6 +332,12 @@ System.Console.WriteLine();
     OptimumResult result2 = OptimumMoreOneArg.ConjugateGradient(new Vector(new double[] { 4.0, 4.0 }), 0.1,  0.000001, funcForGradient);
     Console.WriteLine("ConjugateGradients func=10 x^2 + y^2 {0}", result2);
 }
+System.Console.WriteLine();
+{
+    // метод деформированного многогранника
+    OptimumResult result = OptimumVector.NelderMeadeMethod(new Vector(new double[] { 0.0, 0.0 }), 0.1, 0.000001, Rosenbrock);
+    Console.WriteLine("NedlerMeadOptimization func=Rosenbrock {0}", result);
+}
 
 
 #elif Simplex

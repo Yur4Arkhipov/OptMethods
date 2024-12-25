@@ -331,4 +331,90 @@ class OptimumMoreOneArg {
         return grad;
     }
 
+   // Метод Нелдера-Мида
+    public static OptimumResult NelderMeadOptimization(
+        Vector initialPoint, 
+        double step, 
+        double h, 
+        Function objectiveFunction)
+    {
+        // Параметры алгоритма
+        const double reflectionCoeff = 1.0;
+        const double contractionCoeff = 0.5;
+        const double expansionCoeff = 2.0;
+        int iterationCount = 0;
+
+        int dimension = initialPoint.Size;
+        int simplexSize = dimension + 1;
+        
+        // Инициализация начального симплекса
+        Vector[] simplex = new Vector[simplexSize];
+        simplex[0] = initialPoint.Copy();
+        for (int i = 1; i < simplexSize; i++)
+        {
+            Vector vertex = initialPoint.Copy();
+            vertex[i - 1] += step;
+            simplex[i] = vertex;
+        }
+
+        // Функция для сортировки вершин по значению функции
+        Func<Vector[], Vector[]> SortSimplex = (vertices) =>
+            vertices.OrderBy(v => objectiveFunction(v)).ToArray();
+
+        // Главный цикл оптимизации
+        while (Vector.CalculateSimplexSize(simplex) > h)
+        {
+            // Сортировка симплекса по значению целевой функции
+            simplex = SortSimplex(simplex);
+
+            Vector bestPoint = simplex[0];
+            Vector secondWorstPoint = simplex[simplexSize - 2];
+            Vector worstPoint = simplex[simplexSize - 1];
+
+            // Вычисляем центр тяжести
+            Vector centroid = new Vector(dimension);
+            for (int i = 0; i < dimension; i++)
+            {
+                centroid[i] = (bestPoint[i] + secondWorstPoint[i]) / 2.0;
+            }
+
+            // Отражение
+            Vector reflectedPoint = centroid + reflectionCoeff * (centroid - worstPoint);
+            if (objectiveFunction(reflectedPoint) < objectiveFunction(secondWorstPoint))
+            {
+                simplex[simplexSize - 1] = reflectedPoint;
+                continue;
+            }
+
+            // Проверка на сжатие
+            if (objectiveFunction(reflectedPoint) >= objectiveFunction(secondWorstPoint))
+            {
+                Vector contractedPoint = centroid + contractionCoeff * (worstPoint - centroid);
+                if (objectiveFunction(contractedPoint) < objectiveFunction(worstPoint))
+                {
+                    simplex[simplexSize - 1] = contractedPoint;
+                }
+                continue;
+            }
+
+            // Растяжение
+            if (objectiveFunction(reflectedPoint) < objectiveFunction(bestPoint))
+            {
+                Vector expandedPoint = centroid + expansionCoeff * (reflectedPoint - centroid);
+                simplex[simplexSize - 1] = objectiveFunction(expandedPoint) < objectiveFunction(reflectedPoint)
+                    ? expandedPoint
+                    : reflectedPoint;
+            }
+            else
+            {
+                simplex[simplexSize - 1] = reflectedPoint;
+            }
+
+            iterationCount++;
+        }
+        // Возвращаем результат
+        Vector optimalPoint = simplex[0];
+        double optimalValue = objectiveFunction(optimalPoint);
+        return new OptimumResult(optimalPoint, null, new Vector(optimalValue), iterationCount);
+    }
 }
