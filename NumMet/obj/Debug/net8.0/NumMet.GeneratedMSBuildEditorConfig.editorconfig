@@ -8,6 +8,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = NumMet
-build_property.ProjectDir = C:\projects\numMet\NumMet\
+build_property.ProjectDir = C:\projects\pomoika\ИОиМО\project\OptMethods\NumMet\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 

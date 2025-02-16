@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <ostream>
+#include <string>
 #include <vector>
 #include <iomanip>
 #include <limits>
@@ -125,9 +126,6 @@ void initialize_table(
     // Записываем пересчитанное значение свободного члена
     table[num_equations][num_cols - 1] = sum_b; 
 }
-
-
-
 
 void canonicalize(
     std::vector<std::vector<double>> &restriction_coefficients, 

@@ -259,4 +259,74 @@ class Matrix {
         }
         Console.Write('\n');
     }
+
+    public static Matrix MatrixInverse(Matrix A)
+    {
+        int n = A.Rows; // Размерность матрицы (квадратная матрица)
+        if (A.Columns != n)
+            throw new InvalidOperationException("Матрица должна быть квадратной.");
+
+        // Создаём расширенную матрицу [A | I], где I — единичная матрица
+        Matrix augmented = new Matrix(n, 2 * n);
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                augmented[i, j] = A[i, j];
+            }
+            augmented[i, n + i] = 1; // Единичная матрица справа
+        }
+
+        // Прямой ход метода Гаусса
+        for (int i = 0; i < n; i++)
+        {
+            // Проверяем главный элемент
+            if (augmented[i, i] == 0)
+            {
+                // Пытаемся поменять строки, если ведущий элемент равен 0
+                bool swapped = false;
+                for (int k = i + 1; k < n; k++)
+                {
+                    if (augmented[k, i] != 0)
+                    {
+                        augmented.SwapRows(i, k);
+                        swapped = true;
+                        break;
+                    }
+                }
+                if (!swapped)
+                    throw new InvalidOperationException("Матрица необратима.");
+            }
+
+            // Нормализуем строку
+            double diagValue = augmented[i, i];
+            for (int j = 0; j < 2 * n; j++)
+            {
+                augmented[i, j] /= diagValue;
+            }
+
+            // Обнуляем остальные элементы в столбце
+            for (int k = 0; k < n; k++)
+            {
+                if (k == i) continue;
+                double factor = augmented[k, i];
+                for (int j = 0; j < 2 * n; j++)
+                {
+                    augmented[k, j] -= factor * augmented[i, j];
+                }
+            }
+        }
+
+        // Извлекаем обратную матрицу из расширенной матрицы
+        Matrix inverse = new Matrix(n, n);
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                inverse[i, j] = augmented[i, n + j];
+            }
+        }
+
+        return inverse;
+    }
 }

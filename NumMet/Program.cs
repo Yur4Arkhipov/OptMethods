@@ -5,8 +5,8 @@
 // #define Integral
 // #define Differential
 // #define OptimumOneArg 
-// #define OptimumMoreOneArg
-// #define Simplex
+#define OptimumMoreOneArg
+// #define LinearProgramming
 
 
 
@@ -340,9 +340,23 @@ System.Console.WriteLine();
 }
 
 
-#elif Simplex
+#elif LinearProgramming 
 
+{
+    LinearProgramming lp = new LinearProgramming();
 
+    int[] supply = { 50, 60, 70 };
+    int[] demand = { 30, 40, 60 };
+    int[,] cost = { 
+        { 2, 3, 1 },
+        { 5, 4, 8 },
+        { 6, 7, 4 } 
+    };
+
+    int[,] allocation = lp.SolveTransportationProblem(supply, demand, cost);
+
+    lp.PrintSolution(allocation, cost);
+}
 
 #endif
 

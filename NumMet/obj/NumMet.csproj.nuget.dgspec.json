@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\projects\\numMet\\NumMet\\NumMet.csproj": {}
+    "C:\\projects\\pomoika\\ИОиМО\\project\\OptMethods\\NumMet\\NumMet.csproj": {}
   },
   "projects": {
-    "C:\\projects\\numMet\\NumMet\\NumMet.csproj": {
+    "C:\\projects\\pomoika\\ИОиМО\\project\\OptMethods\\NumMet\\NumMet.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\projects\\numMet\\NumMet\\NumMet.csproj",
+        "projectUniqueName": "C:\\projects\\pomoika\\ИОиМО\\project\\OptMethods\\NumMet\\NumMet.csproj",
         "projectName": "NumMet",
-        "projectPath": "C:\\projects\\numMet\\NumMet\\NumMet.csproj",
+        "projectPath": "C:\\projects\\pomoika\\ИОиМО\\project\\OptMethods\\NumMet\\NumMet.csproj",
         "packagesPath": "C:\\Users\\yuraa\\.nuget\\packages\\",
-        "outputPath": "C:\\projects\\numMet\\NumMet\\obj\\",
+        "outputPath": "C:\\projects\\pomoika\\ИОиМО\\project\\OptMethods\\NumMet\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

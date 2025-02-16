@@ -56,3 +56,11 @@ C:\projects\numMet\NumMet\bin\Debug\net8.0\NumMet.dll
 C:\projects\numMet\NumMet\bin\Debug\net8.0\NumMet.pdb
 C:\projects\numMet\NumMet\obj\Debug\net8.0\NumMet.genruntimeconfig.cache
 C:\projects\numMet\NumMet\obj\Debug\net8.0\ref\NumMet.dll
+C:\projects\pomoika\ИОиМО\project\OptMethods\NumMet\obj\Debug\net8.0\NumMet.GeneratedMSBuildEditorConfig.editorconfig
+C:\projects\pomoika\ИОиМО\project\OptMethods\NumMet\obj\Debug\net8.0\NumMet.AssemblyInfoInputs.cache
+C:\projects\pomoika\ИОиМО\project\OptMethods\NumMet\obj\Debug\net8.0\NumMet.AssemblyInfo.cs
+C:\projects\pomoika\ИОиМО\project\OptMethods\NumMet\obj\Debug\net8.0\NumMet.csproj.CoreCompileInputs.cache
+C:\projects\pomoika\ИОиМО\project\OptMethods\NumMet\obj\Debug\net8.0\NumMet.sourcelink.json
+C:\projects\pomoika\ИОиМО\project\OptMethods\NumMet\obj\Debug\net8.0\NumMet.dll
+C:\projects\pomoika\ИОиМО\project\OptMethods\NumMet\obj\Debug\net8.0\refint\NumMet.dll
+C:\projects\pomoika\ИОиМО\project\OptMethods\NumMet\obj\Debug\net8.0\NumMet.pdb
