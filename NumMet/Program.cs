@@ -5,8 +5,7 @@
 // #define Integral
 // #define Differential
 // #define OptimumOneArg 
-#define OptimumMoreOneArg
-// #define LinearProgramming
+// #define OptimumMoreOneArg
 
 
 
@@ -229,6 +228,98 @@ static Matrix roundMatrix(Matrix m) {
 
 double xopt, fopt;
 int iterations;
+
+// Метод bracketMinimum определения границ интервала, содержащего экстремум
+System.Console.WriteLine("BracketMinimum:");
+{
+    var (start1, end1) = OptimumOneArg.BracketMinimum(x => Math.Pow(x - 3, 2));
+    Console.WriteLine($"func = (x-3)^2 >>> Интервал минимума: [{start1}, {end1}]");
+    var (start2, end2) = OptimumOneArg.BracketMinimum(x => Math.Pow(x + 2, 2) + 6);
+    Console.WriteLine($"func = (x+2)^2 + 6 >>> Интервал минимума: [{start2}, {end2}]");
+}
+System.Console.WriteLine();
+
+// Метод Фидбоначчи
+System.Console.WriteLine("Fibonacci method:");
+{
+    Func<double, double> f1 = x => Math.Pow(x - 3, 2);
+    // Интервал поиска
+    double a1 = 0;
+    double b1 = 6;
+    // Число итераций
+    int n1 = 100;
+    // Поиск минимума
+    var (start1, end1) = OptimumOneArg.FibonacciSearch(f1, a1, b1, n1);
+    Console.WriteLine($"func = (x-3)^2 >>> Интервал минимума: [{start1}, {end1}]");
+    Func<double, double> f2 = x => Math.Pow(x +2, 2) + 6;
+    // Интервал поиска
+    double a2 = -5;
+    double b2 = 10;
+    // Число итераций
+    int n2 = 100;
+    // Поиск минимума
+    var (start2, end2) = OptimumOneArg.FibonacciSearch(f2, a2, b2, n2);
+    Console.WriteLine($"func = (x+2)^2 + 6 >>> Интервал минимума: [{start2}, {end2}]");
+}
+System.Console.WriteLine();
+
+// Метод Золотого сечения
+System.Console.WriteLine("GoldenSectionSearch: ");
+{
+    // Функция f(x) = (x - 3)^2
+    Func<double, double> f1 = x => Math.Pow(x - 3, 2);
+    double a1 = 0;
+    double b1 = 6;
+    int n1 = 100;
+
+    var (start1, end1) = OptimumOneArg.GoldenSectionSearch(f1, a1, b1, n1);
+    Console.WriteLine($"func = (x-3)^2 >>> Интервал минимума: [{start1}, {end1}]");
+
+    // Функция f(x) = sin(x) в интервале [2, 4]
+    Func<double, double> f2 = x => Math.Sin(x);
+    double a2 = 2;
+    double b2 = 4;
+    int n2 = 15;
+
+    var (start2, end2) = OptimumOneArg.GoldenSectionSearch(f2, a2, b2, n2);
+    Console.WriteLine($"func = sin(x) >>> Интервал минимума: [{start2}, {end2}]");
+
+    // Функция f(x) = exp(x-2)-x в интервале [-2, 6]
+    Func<double, double> f3 = x => Math.Exp(x-2)-x;
+    double a3 = -2;
+    double b3 = 6;
+    int n3 = 30;
+
+    var (start3, end3) = OptimumOneArg.GoldenSectionSearch(f3, a3, b3, n3);
+    Console.WriteLine($"func = exp(x-2)-x [-2, 6] >>> Интервал минимума: [{start3}, {end3}]");
+}
+System.Console.WriteLine();
+
+// QuaranticFitSearch (Метод квадратичной аппроксимации)
+System.Console.WriteLine("QuadranticFitSearch:");
+{ 
+    // Функция f(x) = (x - 3)^2
+    Func<double, double> f1 = x => Math.Pow(x - 3, 2);
+    double a1 = 0;
+    double b1 = 2;
+    double c1 = 4;
+    int n1 = 100;
+
+    var (start1, mid1, end1) = OptimumOneArg.QuadraticFitSearch(f1, a1, b1, c1, n1);
+    Console.WriteLine($"func = (x-3)^2 >>> Интервал минимума: ({start1}, {mid1}, {end1})");
+
+    // Функция f(x) = sin(x) в интервале [0, π]
+    Func<double, double> f2 = x => Math.Sin(x);
+    double a2 = 0;
+    double b2 = Math.PI / 2;
+    double c2 = Math.PI;
+    int n2 = 20;
+
+    var (start2, mid2, end2) = OptimumOneArg.QuadraticFitSearch(f2, a2, b2, c2, n2);
+    Console.WriteLine($"func = sin(x) [0, π] >>> Интервал минимума: ({start2}, {mid2}, {end2})");
+}
+System.Console.WriteLine();
+
 // Метод может искать только min
 Console.WriteLine("StepByStepMethod: ");
 (xopt, fopt, iterations) = OptimumOneArg.StepByStepMethod(1.0, 0.5, 0.000001, x => x * x + x);
@@ -269,7 +360,6 @@ static double funcForGradient(Vector x)
 {
     return 100 * x[0] * x[0] + x[1] * x[1];
 }
-
 {
     // Метод случайного поиска
     OptimumResult result = OptimumMoreOneArg.RandomSearch(new Vector(new double[] { 0.0, 0.0 }), 0.000001, Rosenbrock, 0.1);
@@ -284,6 +374,21 @@ static double funcForGradient(Vector x)
     Console.WriteLine("ModifiedRandomSearch func=10 x^2 + y^2 {0}", result4);
 }
 System.Console.WriteLine();
+
+// Метод Ньютона
+{
+    // Пример функции f(x, y) = (x-1)^2 + (y-2)^2
+    Func<Vector, double> f = v => Math.Pow(v[0] - 1, 2) + Math.Pow(v[1] - 2, 2);
+
+    Vector x0 = new Vector(new double[] { 0, 0 }); // Начальная точка
+    double eps = 1e-6;
+
+    (Vector optimum, double fValue) = OptimumMoreOneArg.Newton(x0, eps, f);
+
+    Console.WriteLine($"Newton's method: func=(x-1)^2 + (y-2)^2 >>> Min: x={optimum}, f(x)={fValue}");
+}
+System.Console.WriteLine();
+
 // Градиентные методы
 {
     // Простой градиентный метод
@@ -304,7 +409,7 @@ System.Console.WriteLine();
     Console.WriteLine("Gradient func=10 x^2 + y^2 {0}, step: 0.001", result7);
     Console.WriteLine("Gradient func=10 x^2 + y^2 {0}, step: 0.0005", result8);
     // Из полученных результатов можно сделать вывод, что при слишком большом чаге метод расходится,
-    // при слишком малом сходится медленно и точчность хуже.
+    // при слишком малом сходится медленно и точность хуже.
     // Нужно выбирать шаг наибольшим из тех, при которых метод сходится.
     // Вывод: шаг 0.001 - оптимальный
 }
@@ -333,31 +438,49 @@ System.Console.WriteLine();
     Console.WriteLine("ConjugateGradients func=10 x^2 + y^2 {0}", result2);
 }
 System.Console.WriteLine();
+
+// Nealder-Mead (деформированный многогранник)
 {
-    // метод деформированного многогранника
-    OptimumResult result = OptimumVector.NelderMeadeMethod(new Vector(new double[] { 0.0, 0.0 }), 0.1, 0.000001, Rosenbrock);
-    Console.WriteLine("NedlerMeadOptimization func=Rosenbrock {0}", result);
-}
-
-
-#elif LinearProgramming 
-
-{
-    LinearProgramming lp = new LinearProgramming();
-
-    int[] supply = { 50, 60, 70 };
-    int[] demand = { 30, 40, 60 };
-    int[,] cost = { 
-        { 2, 3, 1 },
-        { 5, 4, 8 },
-        { 6, 7, 4 } 
+    Func<Vector, double> Rosenbrock1 = (Vector v) => {
+        double x = v.GetElement(0);
+        double y = v.GetElement(1);
+        return 100 * Math.Pow(y - x * x, 2) + Math.Pow(1 - x, 2);
     };
 
-    int[,] allocation = lp.SolveTransportationProblem(supply, demand, cost);
+    Vector initialGuess = new Vector(new double[] { 0.0, 0.0 });
+    double stepSize = 0.1;
+    double epsilon = 1e-6;
 
-    lp.PrintSolution(allocation, cost);
+    OptimumResult result = OptimumMoreOneArg.NelderMeadeMethod(initialGuess, stepSize, epsilon, Rosenbrock);
+    Console.WriteLine($"NelderMeadeMethod func=Rosenbrock {result}");
 }
+{
+    Func<Vector, double> f = (Vector v) => v.GetElement(0) * v.GetElement(0) + v.GetElement(1) * v.GetElement(1); // Пример квадратичной функции
+    Vector[] simplex = new Vector[] {
+        new Vector(new double[] { 1.0, 2.0 }),
+        new Vector(new double[] { 1.5, 2.5 }),
+        new Vector(new double[] { 2.0, 1.0 })
+    };
+    Vector result1 = OptimumMoreOneArg.NelderMead(f, simplex);
+    Vector result2 = OptimumMoreOneArg.NelderMead(Rosenbrock, simplex);
+    Console.WriteLine($"Optimized point: {result1}");
+    Console.WriteLine($"Optimized point: {result2}");
+}
+System.Console.WriteLine();
 
+
+// Методы спуска
+// Метод линейного поиска (LineSearch)
+System.Console.WriteLine("Densent");
+{
+    // Пример функции f(x) = (x₁ - 1)² + (x₂ - 2)²
+    Func<double[], double> f = x => Math.Pow(x[0] - 1, 2) + Math.Pow(x[1] - 2, 2);
+
+    double[] x = { 0.0, 0.0 }; // Начальная точка
+    double[] d = { 1.0, 1.0 }; // Направление поиска
+
+    double[] result = OptimumMoreOneArg.LineSearch(f, x, d);
+
+    Console.WriteLine($"Новая точка: [{string.Join(", ", result)}]");
+}
 #endif
-
-
