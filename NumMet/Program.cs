@@ -6,7 +6,7 @@
 // #define Differential
 // #define OptimumOneArg 
 // #define OptimumMoreOneArg
-
+#define LinearProgramming
 
 
 #if NonLinear //Non-linear alg
@@ -483,4 +483,15 @@ System.Console.WriteLine("Densent");
 
     Console.WriteLine($"Новая точка: [{string.Join(", ", result)}]");
 }
+
+
+#elif LinearProgramming
+
+System.Console.WriteLine("TransportationProblem: ");
+{
+    
+}
+
+
+
 #endif

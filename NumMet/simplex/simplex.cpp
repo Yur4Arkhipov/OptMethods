@@ -371,6 +371,64 @@ double calculate_fun(
     return result;
 }
 
+int simplex_main() {
+    int num_equations, num_variables;
+    std::ifstream input_file;
+    std::ofstream output_file;
+
+    open_files(input_file, output_file, "input.txt", "output.txt");
+    std::vector<std::vector<double>> restriction_coefficients;
+    std::vector<double> b;
+    std::vector<int> signs;
+    std::vector<double> function_coefficients;
+    read_input(input_file, num_equations, num_variables, restriction_coefficients, b, signs, function_coefficients);
+    input_file.close();
+
+    // Приведение к канонической форме
+    std::vector<std::vector<double>> canonical_rest_coefs;
+    std::vector<double> canonical_fun_coefs;
+    std::vector<double> costs;
+    canonicalize(restriction_coefficients, b, signs, function_coefficients, canonical_rest_coefs, canonical_fun_coefs, costs, output_file);
+    
+    // Инициализация симплекс таблицы
+    int num_rows = num_equations + 1; // +1 для f
+    int num_cols = canonical_fun_coefs.size() + 1; // +1 для b
+    std::vector<std::vector<double>> table(num_rows, std::vector<double>(num_cols, 0.0f));
+    std::vector<int> cure_bases_idx;
+    initialize_table(canonical_rest_coefs, b, canonical_fun_coefs, table, cure_bases_idx, costs);
+
+    int count_iteration = 0;
+    print_table(output_file, table, count_iteration, cure_bases_idx);
+
+    // пересчет элементов матрицы
+    while (simplex_iteration(table, output_file, num_equations, num_variables, cure_bases_idx)) {
+        print_table(output_file, table, count_iteration, cure_bases_idx);
+    }
+    
+    double result = calculate_fun(cure_bases_idx, costs, table);
+    write_solution(output_file, result, table, cure_bases_idx);
+    output_file.close();
+
+    std::cout << "Result: " << result << std::endl;
+    std::vector<double> solution(num_variables, 0.0);
+    for (int i = 0; i < num_equations; ++i) {
+        if (cure_bases_idx[i] < num_variables) { 
+            solution[cure_bases_idx[i]] = table[i][num_variables];
+        }
+    }
+    std::cout << "Variable Values:\n";
+    for (int i = 0; i < num_variables; ++i) {
+        std::cout << "X" << (i + 1) << " = " << std::fixed << std::setprecision(2) << solution[i] << "\n";
+    }
+    std::cout << "b: \n";
+    for (int i = 0; i < cure_bases_idx.size(); ++i) {
+        std::cout << table[i][num_cols - 1] << " ";
+    }
+    std::cout << std::endl;
+
+    return 0;
+}
+
 int main() {
     int num_equations, num_variables;
     std::ifstream input_file;

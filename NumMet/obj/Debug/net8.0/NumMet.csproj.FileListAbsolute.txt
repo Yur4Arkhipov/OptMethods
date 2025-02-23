@@ -64,3 +64,10 @@ C:\projects\pomoika\ИОиМО\project\OptMethods\NumMet\obj\Debug\net8.0\NumMet
 C:\projects\pomoika\ИОиМО\project\OptMethods\NumMet\obj\Debug\net8.0\NumMet.dll
 C:\projects\pomoika\ИОиМО\project\OptMethods\NumMet\obj\Debug\net8.0\refint\NumMet.dll
 C:\projects\pomoika\ИОиМО\project\OptMethods\NumMet\obj\Debug\net8.0\NumMet.pdb
+C:\projects\pomoika\ИОиМО\project\OptMethods\NumMet\bin\Debug\net8.0\NumMet.exe
+C:\projects\pomoika\ИОиМО\project\OptMethods\NumMet\bin\Debug\net8.0\NumMet.deps.json
+C:\projects\pomoika\ИОиМО\project\OptMethods\NumMet\bin\Debug\net8.0\NumMet.runtimeconfig.json
+C:\projects\pomoika\ИОиМО\project\OptMethods\NumMet\bin\Debug\net8.0\NumMet.dll
+C:\projects\pomoika\ИОиМО\project\OptMethods\NumMet\bin\Debug\net8.0\NumMet.pdb
+C:\projects\pomoika\ИОиМО\project\OptMethods\NumMet\obj\Debug\net8.0\NumMet.genruntimeconfig.cache
+C:\projects\pomoika\ИОиМО\project\OptMethods\NumMet\obj\Debug\net8.0\ref\NumMet.dll
