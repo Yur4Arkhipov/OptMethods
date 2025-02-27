@@ -290,7 +290,7 @@ public class Graphs {
             return centers;
         }
 
-            // Находит путь с помощью BFS в остаточной сети
+        // Находит путь с помощью BFS в остаточной сети
         private bool BFSPath(Vertex source, Vertex sink, Dictionary<Vertex, Vertex> parent) {
             // Инициализация всех вершин как непосещенные
             foreach (Vertex vertex in allVertexs) {
@@ -321,7 +321,6 @@ public class Graphs {
             return sink.color != COLORS_VERTEX.WHITE;
         }
 
-        // Находит ребро между двумя вершинами
         private Edge GetEdge(Vertex u, Vertex v) {
             return u.GetEdges().Find(e => e.EndPoint == v);
         }
@@ -345,46 +344,78 @@ public class Graphs {
         }
 
         // Основной алгоритм Форда-Фалкерсона
-        public double FordFulkerson(Vertex source, Vertex sink) {
-            if (source == sink) return 0;
+public double FordFulkerson(Vertex source, Vertex sink) {
+    if (source == sink) return 0;
 
-            double maxFlow = 0;
-            Dictionary<Vertex, Vertex> parent = new Dictionary<Vertex, Vertex>();
+    double maxFlow = 0;
+    Dictionary<Vertex, Vertex> parent = new Dictionary<Vertex, Vertex>();
+    
+    // Сохраняем начальные пропускные способности
+    Dictionary<(Vertex, Vertex), double> initialCapacities = new Dictionary<(Vertex, Vertex), double>();
+    Dictionary<(Vertex, Vertex), double> currentFlows = new Dictionary<(Vertex, Vertex), double>();
+    foreach (Edge edge in allEdges) {
+        initialCapacities.Add((edge.BeginPoint, edge.EndPoint), edge.distance);
+        currentFlows.Add((edge.BeginPoint, edge.EndPoint), 0);
+    }
 
-            // Создаем остаточную сеть
-            Graph residualGraph = new Graph(isDirected);
-            foreach (Vertex v in allVertexs) {
-                residualGraph.allVertexs.Add(v);
+    // Создаем остаточную сеть
+    Graph residualGraph = new Graph(isDirected);
+    foreach (Vertex v in allVertexs) {
+        residualGraph.allVertexs.Add(v);
+    }
+
+    // Копируем ребра с учетом типа графа
+    foreach (Edge edge in allEdges) {
+        residualGraph.AddEdge(edge.BeginPoint, edge.EndPoint, edge.distance);
+        if (isDirected) {
+            if (GetEdge(edge.EndPoint, edge.BeginPoint) == null) {
+                residualGraph.AddEdge(edge.EndPoint, edge.BeginPoint, 0);
             }
+        }
+    }
 
-            // Копируем ребра с учетом типа графа
-            foreach (Edge edge in allEdges) {
-                residualGraph.AddEdge(edge.BeginPoint, edge.EndPoint, edge.distance);
-                if (isDirected) {
-                    // Для ориентированного графа добавляем обратные ребра с нулевой пропускной способностью
-                    if (GetEdge(edge.EndPoint, edge.BeginPoint) == null) {
-                        residualGraph.AddEdge(edge.EndPoint, edge.BeginPoint, 0);
-                    }
-                }
-            }
+    Console.WriteLine("\nНачальные пропускные способности ребер:");
+    foreach (var edge in allEdges) {
+        Console.WriteLine($"Ребро {edge.BeginPoint.label} -> {edge.EndPoint.label}: {edge.distance}");
+    }
 
-            while (BFSPath(source, sink, parent)) {
-                double pathFlow = double.MaxValue;
-                for (Vertex v = sink; v != source; v = parent[v]) {
-                    Vertex u = parent[v];
-                    Edge edge = GetEdge(u, v);
-                    pathFlow = Math.Min(pathFlow, edge.distance);
-                }
+    while (BFSPath(source, sink, parent)) {
+        double pathFlow = double.MaxValue;
+        for (Vertex v = sink; v != source; v = parent[v]) {
+            Vertex u = parent[v];
+            Edge edge = GetEdge(u, v);
+            pathFlow = Math.Min(pathFlow, edge.distance);
+        }
 
-                for (Vertex v = sink; v != source; v = parent[v]) {
-                    Vertex u = parent[v];
-                    UpdateFlow(u, v, pathFlow);
-                }
+        // Вывод найденного пути и его пропускной способности
+        Console.WriteLine($"\nНайден путь с пропускной способностью {pathFlow}:");
+        for (Vertex v = sink; v != source; v = parent[v]) {
+            Console.Write($"{v.label} <- ");
+        }
+        Console.WriteLine(source.label);
 
-                maxFlow += pathFlow;
-            }
+        // Обновление потока
+        for (Vertex v = sink; v != source; v = parent[v]) {
+            Vertex u = parent[v];
+            UpdateFlow(u, v, pathFlow);
+            currentFlows[(u, v)] += pathFlow;
+        }
 
-            return maxFlow;
-        }   
+        maxFlow += pathFlow;
+    }
+
+    Console.WriteLine("\nОстаточные пропускные способности ребер:");
+    foreach (var edge in allEdges) {
+        double initialCapacity = initialCapacities[(edge.BeginPoint, edge.EndPoint)];
+        double currentFlow = currentFlows[(edge.BeginPoint, edge.EndPoint)];
+        double remainingCapacity = edge.distance;
+        // double usedCapacity = initialCapacity - remainingCapacity;
+        Console.WriteLine($"Ребро {edge.BeginPoint.label} -> {edge.EndPoint.label}: " +
+            $"использовано {currentFlow} из {initialCapacity}");
+    }
+
+    Console.WriteLine($"\nМаксимальный поток: {maxFlow}");
+    return maxFlow;
+}    
     }
 }
