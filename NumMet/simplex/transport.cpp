@@ -4,9 +4,9 @@
 #include <vector>
 
 struct TransportProblem {
-    std::vector<double> supply;      // Supply quantities
-    std::vector<double> demand;      // Demand quantities  
-    std::vector<std::vector<double>> costs; // Transportation costs matrix
+    std::vector<double> supply;      // Кол-во поставок
+    std::vector<double> demand;      // Кол-во потребностей  
+    std::vector<std::vector<double>> costs; // Матрица стоимостей перевозок
 };
 
 void transportToLinear(
@@ -16,8 +16,8 @@ void transportToLinear(
     std::vector<int>& signs,
     std::vector<double>& objective
 ) {
-    int m = tp.supply.size();    // Number of suppliers
-    int n = tp.demand.size();    // Number of consumers
+    int m = tp.supply.size();    // Количество поставщиков
+    int n = tp.demand.size();    // Количество потребителей
     int total_vars = m * n;      // Total number of variables xij
     int total_constraints = m + n; // Supply + demand constraints
 

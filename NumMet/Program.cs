@@ -6,7 +6,8 @@
 // #define Differential
 // #define OptimumOneArg 
 // #define OptimumMoreOneArg
-#define LinearProgramming
+// #define LinearProgramming
+#define Graph
 
 
 #if NonLinear //Non-linear alg
@@ -487,11 +488,94 @@ System.Console.WriteLine("Densent");
 
 #elif LinearProgramming
 
-System.Console.WriteLine("TransportationProblem: ");
+/* System.Console.WriteLine("TransportationProblem: ");
 {
     
+} */
+
+
+#elif Graph
+
+System.Console.WriteLine("FordFulkerson:");
+{
+    Graphs.Graph g = new Graphs.Graph();
+    
+    // Create vertices
+    Graphs.Vertex a = new Graphs.Vertex("A"); // source
+    Graphs.Vertex f = new Graphs.Vertex("F"); // sink
+    Graphs.Vertex b = new Graphs.Vertex("B");
+    Graphs.Vertex c = new Graphs.Vertex("C");
+    Graphs.Vertex d = new Graphs.Vertex("D");
+    Graphs.Vertex e = new Graphs.Vertex("E");
+    
+    // Add vertices to graph
+    g.allVertexs.AddRange(new List<Graphs.Vertex> {a, f, b, c, d, e});
+    
+    // // Add edges with capacities
+    g.allEdges.AddRange(new List<Graphs.Edge> {
+        new Graphs.Edge(a, b, 7),
+        new Graphs.Edge(a, c, 4),
+        new Graphs.Edge(b, c, 4),
+        new Graphs.Edge(b, e, 2),
+        new Graphs.Edge(c, e, 8),
+        new Graphs.Edge(c, d, 4),
+        new Graphs.Edge(e, d, 4),
+        new Graphs.Edge(e, f, 5),
+        new Graphs.Edge(d, f, 12),
+    });
+    
+    // Find maximum flow
+    double maxFlow = g.FordFulkerson(a, f);
+    Console.WriteLine($"Maximum flow: {maxFlow}");
 }
+{
+    Graphs.Graph g = new Graphs.Graph();
+    
+    // Create vertices
+    Graphs.Vertex a = new Graphs.Vertex("A"); // source
+    Graphs.Vertex f = new Graphs.Vertex("F"); // sink
+    Graphs.Vertex b = new Graphs.Vertex("B");
+    Graphs.Vertex c = new Graphs.Vertex("C");
+    Graphs.Vertex d = new Graphs.Vertex("D");
+    Graphs.Vertex e = new Graphs.Vertex("E");
+    
+    // Add vertices to graph
+    g.allVertexs.AddRange(new List<Graphs.Vertex> {a, f, b, c, d, e});
+    
+    // // Add edges with capacities
+    g.allEdges.AddRange(new List<Graphs.Edge> {
+        new Graphs.Edge(a, b, 10),
+        new Graphs.Edge(b, a, 10),
+        new Graphs.Edge(a, d, 7),
+        new Graphs.Edge(d, a, 7),
+        new Graphs.Edge(a, f, 6),
+        new Graphs.Edge(f, a, 6),
+        new Graphs.Edge(a, e, 8),
+        new Graphs.Edge(e, a, 8),
 
+        new Graphs.Edge(b, f, 9),
+        new Graphs.Edge(f, b, 9),
+        new Graphs.Edge(b, d, 10),
+        new Graphs.Edge(d, b, 10),
+        new Graphs.Edge(b, c, 8),
+        new Graphs.Edge(c, b, 8),
+        new Graphs.Edge(b, e, 9),
+        new Graphs.Edge(e, b, 9),
 
+        new Graphs.Edge(c, e, 10),
+        new Graphs.Edge(e, c, 10),
+        new Graphs.Edge(c, d, 10),
+        new Graphs.Edge(d, c, 10),
+
+        new Graphs.Edge(d, f, 12),
+        new Graphs.Edge(f, d, 12),
+        new Graphs.Edge(d, e, 6),
+        new Graphs.Edge(e, d, 6),
+    });
+    
+    // Find maximum flow
+    double maxFlow = g.FordFulkerson(a, f);
+    Console.WriteLine($"Maximum flow: {maxFlow}");
+}
 
 #endif
