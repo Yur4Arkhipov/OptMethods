@@ -65,10 +65,10 @@ extern void open_files(std::ifstream &input_file, std::ofstream &output_file,
                       const std::string &input_fileName, const std::string &output_fileName);
 extern int simplex_main();
 
-void solveTransportProblem(const TransportProblem& tp) {
+std::vector<std::vector<double>> solveTransportProblem(const TransportProblem& tp) {
     if (!isBalanced(tp)) {
         std::cout << "Error: Transportation problem is not balanced\n";
-        return;
+        return std::vector<std::vector<double>>();
     }
 
     std::vector<std::vector<double>> coefficients;
@@ -83,7 +83,7 @@ void solveTransportProblem(const TransportProblem& tp) {
     std::ofstream input("input.txt");
     if (!input.is_open()) {
         std::cerr << "Error: Cannot create input file\n";
-        return;
+        return std::vector<std::vector<double>>();;
     }
 
     int m = tp.supply.size();
@@ -111,20 +111,21 @@ void solveTransportProblem(const TransportProblem& tp) {
     std::ifstream output("output.txt");
     if (!output.is_open()) {
         std::cout << "Error: Cannot read results\n";
-        return;
+        return std::vector<std::vector<double>>();
     }
 
     // Print transportation solution
     std::cout << "\nTransportation Problem Solution:\n";
     std::cout << "================================\n";
 
+    std::vector<std::vector<double>> result(m, std::vector<double>(n, 0.0));
     std::string line;
     bool readingSolution = false;
     double objectiveValue = 0.0;
     while (std::getline(output, line)) {
         if (line.find("Objective Function Value:") != std::string::npos) {
             sscanf(line.c_str(), "Objective Function Value: %lf", &objectiveValue);
-            std::cout << "Total transportation cost: " << -objectiveValue << std::endl; // Negate the value
+            std::cout << "Total transportation cost: " << -objectiveValue << std::endl;
             readingSolution = true;
             continue;
         }
@@ -137,27 +138,38 @@ void solveTransportProblem(const TransportProblem& tp) {
                 var_idx--; // Convert from 1-based to 0-based indexing
                 int i = var_idx / n;  // supplier index
                 int j = var_idx % n;  // consumer index
+                result[i][j] = value; // Store the value in result matrix
                 std::cout << "From Supplier " << (i + 1) << " to Consumer " << (j + 1) 
                          << ": " << value << " units (cost: " << tp.costs[i][j] << ")\n";
             }
         }
     }
+
     output.close();
+    return result;
 }
 
 int main() {
     TransportProblem tp;
     
-    tp.supply = {10, 20, 30};
-    tp.demand = {15, 20, 25};
-    // tp.demand = {25, 30, 25};
+    tp.supply = {25, 20, 20,35};
+    tp.demand = {40, 20, 40};
     
     tp.costs = {
-        {5, 3, 1},
-        {3, 2, 4},
-        {4, 1, 2}  
+        {5, 3, 4},
+        {3, 4, 8},
+        {4, 6, 5},
+        {6, 4, 5}
     };
 
-    solveTransportProblem(tp);
+    auto result = solveTransportProblem(tp);
+    
+    std::cout << "\nResulting transportation matrix:\n";
+    for (const auto& row : result) {
+        for (double value : row) {
+            std::cout << value << "\t";
+        }
+        std::cout << "\n";
+    }
     return 0;
 }

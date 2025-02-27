@@ -77,8 +77,14 @@ public class Graphs {
    public class Graph {
         public List<Vertex> allVertexs; // Список всех вершин
         public List<Edge> allEdges; // Список всех ребер
+        private bool isDirected; // флаг для определения типа графа
         //конструктор
         public Graph() {
+            allVertexs = new List<Vertex>();
+            allEdges = new List<Edge>();
+        }
+        public Graph(bool isDirected = true) {
+            this.isDirected = isDirected;
             allVertexs = new List<Vertex>();
             allEdges = new List<Edge>();
         }
@@ -322,13 +328,20 @@ public class Graphs {
 
         // Обновляет пропускные способности в остаточной сети
         private void UpdateFlow(Vertex u, Vertex v, double flow) {
-            Edge forward = GetEdge(u, v);   // Прямое ребро
-            Edge backward = GetEdge(v, u);  // Обратное ребро
+            Edge forward = GetEdge(u, v);
+            Edge backward = GetEdge(v, u);
 
-            // Уменьшаем поток в прямом направлении
-            if (forward != null) forward.distance -= flow;
-            // Увеличиваем поток в обратном направлении
-            if (backward != null) backward.distance += flow;
+            if (forward != null) {
+                forward.distance -= flow;
+                if (!isDirected && backward != null) {
+                    // Для неориентированного графа синхронизируем пропускные способности
+                    backward.distance = forward.distance;
+                }
+            }
+            // Для ориентированного графа увеличиваем обратный поток
+            if (isDirected && backward != null) {
+                backward.distance += flow;
+            }
         }
 
         // Основной алгоритм Форда-Фалкерсона
@@ -339,24 +352,23 @@ public class Graphs {
             Dictionary<Vertex, Vertex> parent = new Dictionary<Vertex, Vertex>();
 
             // Создаем остаточную сеть
-            // Копируем все вершины
-            Graph residualGraph = new Graph();
+            Graph residualGraph = new Graph(isDirected);
             foreach (Vertex v in allVertexs) {
                 residualGraph.allVertexs.Add(v);
             }
 
-            // Копируем все ребра с их пропускными способностями
+            // Копируем ребра с учетом типа графа
             foreach (Edge edge in allEdges) {
                 residualGraph.AddEdge(edge.BeginPoint, edge.EndPoint, edge.distance);
-                // Добавляем обратные ребра с нулевой пропускной способностью
-                if (GetEdge(edge.EndPoint, edge.BeginPoint) == null) {
-                    residualGraph.AddEdge(edge.EndPoint, edge.BeginPoint, 0);
+                if (isDirected) {
+                    // Для ориентированного графа добавляем обратные ребра с нулевой пропускной способностью
+                    if (GetEdge(edge.EndPoint, edge.BeginPoint) == null) {
+                        residualGraph.AddEdge(edge.EndPoint, edge.BeginPoint, 0);
+                    }
                 }
             }
 
-            // Пока существует путь из истока в сток
             while (BFSPath(source, sink, parent)) {
-                // Находим минимальную пропускную способность на пути
                 double pathFlow = double.MaxValue;
                 for (Vertex v = sink; v != source; v = parent[v]) {
                     Vertex u = parent[v];
@@ -364,7 +376,6 @@ public class Graphs {
                     pathFlow = Math.Min(pathFlow, edge.distance);
                 }
 
-                // Обновляем остаточную сеть
                 for (Vertex v = sink; v != source; v = parent[v]) {
                     Vertex u = parent[v];
                     UpdateFlow(u, v, pathFlow);
@@ -374,6 +385,6 @@ public class Graphs {
             }
 
             return maxFlow;
-        }
-   }
+        }   
+    }
 }

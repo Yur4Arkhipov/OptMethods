@@ -429,7 +429,7 @@ int simplex_main() {
     return 0;
 }
 
-int main() {
+/* int main() {
     int num_equations, num_variables;
     std::ifstream input_file;
     std::ofstream output_file;
@@ -485,4 +485,4 @@ int main() {
     std::cout << std::endl;
 
     return 0;
-}
+} */
