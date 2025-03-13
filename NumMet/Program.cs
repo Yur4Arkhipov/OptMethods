@@ -617,5 +617,34 @@ System.Console.WriteLine("FordFulkerson:");
     double maxFlow = g.FordFulkerson(a, f);
     Console.WriteLine($"Maximum flow: {maxFlow}");
 }
+{
+    Console.WriteLine("Поток:");
+    // Создаём граф
+    Graphs.Graph graph = new Graphs.Graph(isDirected: true);
+
+    Graphs.Vertex v1 = new Graphs.Vertex("1"); // source
+    Graphs.Vertex v2 = new Graphs.Vertex("2"); // sink
+    Graphs.Vertex v3 = new Graphs.Vertex("3");
+    Graphs.Vertex v4 = new Graphs.Vertex("4");
+    Graphs.Vertex v5 = new Graphs.Vertex("5");
+    Graphs.Vertex v6 = new Graphs.Vertex("6");
+
+    graph.allVertexs.AddRange(new List<Graphs.Vertex> {v1, v2, v3, v4, v5, v6});
+
+    // Добавляем рёбра между вершинами
+    graph.AddDualEdge(v1, v2, 7); 
+    graph.AddDualEdge(v1, v3, 4); 
+    graph.AddDualEdge(v2, v4, 2); 
+    graph.AddDualEdge(v2, v3, 4); 
+    graph.AddDualEdge(v3, v4, 8);
+    graph.AddDualEdge(v3, v5, 4);
+    graph.AddDualEdge(v5, v4, 4);
+    graph.AddDualEdge(v6, v4, 5);
+    graph.AddDualEdge(v6, v5, 12);
+
+    double maxFlow = graph.FordFulkerson(v1, v6);
+    // Выводим результат
+    Console.WriteLine("Максимальный поток: " + maxFlow);
+}
 
 #endif
