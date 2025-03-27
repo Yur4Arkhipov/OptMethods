@@ -7,7 +7,8 @@
 // #define OptimumOneArg 
 // #define OptimumMoreOneArg
 // #define LinearProgramming
-#define Graph
+// #define Graph
+#define CreditOptimizer
 
 
 #if NonLinear //Non-linear alg
@@ -646,5 +647,57 @@ System.Console.WriteLine("FordFulkerson:");
     // Выводим результат
     Console.WriteLine("Максимальный поток: " + maxFlow);
 }
+
+#elif CreditOptimizer
+System.Console.WriteLine("Resource Allocation Problem:");
+{
+    int[] funds = { 0, 20, 40, 60, 80, 100 };
+    int[][] enterprisesData = 
+    {
+        new int[] { 0, 10, 31, 42, 62, 76 },  // Предприятие 1 (F1)
+        new int[] { 0, 12, 24, 36, 52, 74 },  // Предприятие 2
+        new int[] { 0, 11, 36, 45, 60, 77 },  // Предприятие 3
+        new int[] { 0, 16, 37, 46, 63, 80 }   // Предприятие 4
+    };
+
+    var optimizer = new CreditOptimizer();
+    var intermediateTables = optimizer.CalculateIntermediateTables(funds, enterprisesData);
+    
+    optimizer.PrintIntermediateTables(funds, intermediateTables);
+}
+System.Console.WriteLine();
+System.Console.WriteLine("Resource Allocation Problem:");
+{
+    // Пример входных данных
+    int[] funds = { 0, 1, 2, 3, 4 };
+    int[][] enterprisesData = new int[][]
+    {
+        new int[] { 0, 10, 18, 29, 38 },  // Предприятие 1
+        new int[] { 0, 11, 18, 27, 39 },    // Предприятие 2
+        new int[] { 0, 9, 19, 30, 40 },    // Предприятие 3
+        new int[] { 0, 12, 20, 28, 39 }     // Предприятие 4
+    };
+
+    var optimizer = new CreditOptimizer();
+    var intermediateTables = optimizer.CalculateIntermediateTables(funds, enterprisesData);
+    optimizer.PrintIntermediateTables(funds, intermediateTables);
+}
+System.Console.WriteLine();
+System.Console.WriteLine("Resource Allocation Problem:");
+{
+    // Пример входных данных
+    int[] funds = { 0, 1, 2, 3, 4 };
+    int[][] enterprisesData = new int[][]
+    {
+        new int[] { 0, 10, 18, 29, 41 },  // Предприятие 1
+        new int[] { 0, 12, 20, 28, 42 },    // Предприятие 2
+        new int[] { 0, 13, 19, 30, 40 },    // Предприятие 3
+    };
+
+    var optimizer = new CreditOptimizer();
+    var intermediateTables = optimizer.CalculateIntermediateTables(funds, enterprisesData);
+    optimizer.PrintIntermediateTables(funds, intermediateTables);
+}
+
 
 #endif
