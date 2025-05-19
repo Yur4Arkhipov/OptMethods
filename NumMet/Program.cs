@@ -9,6 +9,7 @@
 // #define LinearProgramming
 // #define Graph
 #define CreditOptimizer
+// #define Game
 
 
 #if NonLinear //Non-linear alg
@@ -699,5 +700,28 @@ System.Console.WriteLine("Resource Allocation Problem:");
     optimizer.PrintIntermediateTables(funds, intermediateTables);
 }
 
+#elif Game
+{
+    double[,] matrix = new double[,] {
+        {25, 20, 35},
+        {50, 45, 55},
+        {58, 40, 42}
+    };
 
+    Game game = new Game(matrix);
+    game.PrintStrategy();
+}
+System.Console.WriteLine();
+System.Console.WriteLine("Second: ");
+{
+    double[,] matrix = new double[,] {
+        {3, 2, 0, 1},
+        {1, 4, 3, 3}
+        // {3, 8},
+        // {7, 4}
+    };
+
+    Game game = new Game(matrix);
+    game.PrintStrategy();
+}
 #endif
